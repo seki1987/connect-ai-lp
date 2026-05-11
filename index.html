@@ -740,7 +740,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--dark);background:var(--wh
   },{threshold:.1});
   document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
 
-  // pain-item スクロールアニメーション（順番に色変化）
+  // pain-item スクロールアニメーション（順番に色変化・戻らない）
   var items = document.querySelectorAll('.pain-item');
   var o2 = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
@@ -749,14 +749,11 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--dark);background:var(--wh
         var idx = Array.from(items).indexOf(item);
         setTimeout(function(){
           item.classList.add('activated');
-          setTimeout(function(){
-            item.classList.remove('activated');
-          }, 1200);
-        }, idx * 200);
+        }, idx * 300);
         o2.unobserve(item);
       }
     })
-  },{threshold:.3});
+  },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
   items.forEach(function(el){o2.observe(el)});
 })();
 </script>
