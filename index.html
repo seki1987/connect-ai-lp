@@ -743,21 +743,22 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--dark);background:var(--wh
   },{threshold:.1});
   document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
 
-  // pain-item スクロールアニメーション（順番に色変化・戻らない）
+  // pain-item スクロールアニメーション
   var items = document.querySelectorAll('.pain-item');
-  var o2 = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        var item = e.target;
-        var idx = Array.from(items).indexOf(item);
+  function checkItems(){
+    items.forEach(function(item, idx){
+      var rect = item.getBoundingClientRect();
+      var windowH = window.innerHeight || document.documentElement.clientHeight;
+      if(rect.top < windowH - 50 && !item.classList.contains('activated')){
         setTimeout(function(){
           item.classList.add('activated');
-        }, idx * 300);
-        o2.unobserve(item);
+        }, idx * 200);
       }
-    })
-  },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
-  items.forEach(function(el){o2.observe(el)});
+    });
+  }
+  window.addEventListener('scroll', checkItems);
+  window.addEventListener('load', checkItems);
+  checkItems();
 })();
 </script>
 </body>
