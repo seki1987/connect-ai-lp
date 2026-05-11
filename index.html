@@ -64,7 +64,7 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--dark);background:var(--wh
 .pain-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.03em;margin-bottom:60px}
 .pain-title em{font-style:normal;color:var(--orange)}
 .pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:rgba(255,255,255,.12)}
-.pain-item{padding:40px 36px;background:#4a4f5e;transition:background .3s,color .3s}
+.pain-item{padding:40px 36px;background:#4a4f5e;transition:background .5s ease,color .5s ease}
 .pain-item:hover{background:#f8f8ff}.pain-item:hover .pain-num{color:#c4b5fd}.pain-item:hover h3{color:var(--dark)}.pain-item:hover p{color:var(--mid)}
 .pain-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;color:rgba(255,255,255,.15);font-weight:800;letter-spacing:-.03em;margin-bottom:12px;line-height:1;transition:color .3s}
 .pain-item h3{font-size:18px;font-weight:700;color:#fff;line-height:1.5;margin-bottom:10px;transition:color .3s}
@@ -745,20 +745,31 @@ body{font-family:'Noto Sans JP',sans-serif;color:var(--dark);background:var(--wh
 
   // pain-item スクロールアニメーション
   var items = document.querySelectorAll('.pain-item');
+  function activateItem(item){
+    item.style.background = '#ffffff';
+    item.style.transition = 'background 0.5s ease';
+    var num = item.querySelector('.pain-num');
+    var h3 = item.querySelector('h3');
+    var p = item.querySelector('p');
+    if(num) num.style.color = '#c4b5fd';
+    if(h3) h3.style.color = '#1d1d1f';
+    if(p) p.style.color = '#6e6e73';
+  }
   function checkItems(){
     items.forEach(function(item, idx){
       var rect = item.getBoundingClientRect();
       var windowH = window.innerHeight || document.documentElement.clientHeight;
-      if(rect.top < windowH - 50 && !item.classList.contains('activated')){
+      if(rect.top < windowH - 30 && !item.dataset.activated){
+        item.dataset.activated = '1';
         setTimeout(function(){
-          item.classList.add('activated');
+          activateItem(item);
         }, idx * 200);
       }
     });
   }
-  window.addEventListener('scroll', checkItems);
+  window.addEventListener('scroll', checkItems, {passive:true});
   window.addEventListener('load', checkItems);
-  checkItems();
+  setTimeout(checkItems, 500);
 })();
 </script>
 </body>
